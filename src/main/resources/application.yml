@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active:
+    - config
+  jackson:
+    time-zone: America/Sao_Paulo
+      
+server:
+  servlet:
+    context-path: /api/
