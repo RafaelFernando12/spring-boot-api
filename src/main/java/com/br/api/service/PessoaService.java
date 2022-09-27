@@ -32,19 +32,20 @@ public class PessoaService {
 		return new PessoaDto(pessoa);
 	}
 	
-	public Pessoa findById(Long id) {
+	public PessoaDto findById(Long id) {
 		Optional<Pessoa> pessoa = pessoaRepository.findById(id);
 		if(pessoa.isPresent()) {
-			return pessoa.get();
+			return new PessoaDto(pessoa.get());
 		}
 		return null;
 	}
 
 	public PessoaDto atualizar(PessoaDto pessoaDto) {
-		Pessoa objBanco = this.findById(pessoaDto.getId());
+		PessoaDto objBanco = this.findById(pessoaDto.getId());
 		BeanUtils.copyProperties(pessoaDto, objBanco, BeanUtil.getNull(pessoaDto));
-		objBanco = this.save(objBanco); 
-		return new PessoaDto(objBanco);
+		Pessoa pessoa = new Pessoa(objBanco);
+		pessoa = this.save(pessoa); 
+		return new PessoaDto(pessoa);
 	}
 
 	public List<PessoaDto> listar() {
@@ -62,8 +63,8 @@ public class PessoaService {
 	}
 
 	public Long deletar(Long id) {
-		Pessoa pessoa = this.findById(id);
-		pessoaRepository.delete(pessoa);
+		PessoaDto pessoaDto = this.findById(id);
+		pessoaRepository.delete(new Pessoa(pessoaDto));
 		return id;
 	}
 }
